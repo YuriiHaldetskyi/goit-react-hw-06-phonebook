@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { List, Item } from 'components/contacts/contacts.styled';
 import { removeContact } from 'components/redux/contactsSlice';
 import { getContacts, getNameFilter } from 'components/redux/selectiors';
@@ -27,7 +28,7 @@ export const Contacts = () => {
   return (
     <>
       <List>
-        {filtredContacts.value.map(contact => {
+        {filtredContacts.map(contact => {
           return (
             <Item key={contact.id}>
               <p> {contact.name} :</p>
@@ -44,4 +45,12 @@ export const Contacts = () => {
       </List>
     </>
   );
+};
+
+Contacts.propTypes = {
+  contact: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }),
 };

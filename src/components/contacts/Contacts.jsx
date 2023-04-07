@@ -3,27 +3,31 @@ import { removeContact } from 'components/redux/contactsSlice';
 import { getContacts, getNameFilter } from 'components/redux/selectiors';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../GlobalStyled';
+import { useMemo } from 'react';
 
 export const Contacts = () => {
   const contacts = useSelector(getContacts);
   const nameFilter = useSelector(getNameFilter);
   const dispatch = useDispatch();
 
-  console.log(useSelector(getContacts));
   const getVisibleContacts = () => {
-    if (!nameFilter) return contacts;
+    if (!nameFilter) {
+      return contacts;
+    }
 
+    const clearFilter = nameFilter.toLowerCase();
     return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(nameFilter.toLowerCase())
+      contact.name.toLowerCase().includes(clearFilter)
     );
   };
 
-  const visibleContact = getVisibleContacts();
-  console.log(visibleContact);
+  const filtredContacts = useMemo(getVisibleContacts, [contacts, nameFilter]);
+
+  console.log(contacts, filtredContacts);
   return (
     <>
       <List>
-        {visibleContact.value.map(contact => {
+        {filtredContacts.value.map(contact => {
           return (
             <Item key={contact.id}>
               <p> {contact.name} :</p>
